@@ -1,0 +1,10 @@
+curl --location --request POST 'localhost:3333/order/bookOrder' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "order": {
+        "name": "Mobile",
+        "qty": 1,
+        "price": 8000
+    },
+    "payment": {}
+}'
