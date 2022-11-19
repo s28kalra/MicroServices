@@ -1,0 +1,37 @@
+MicroServices:
+
+1: All micro services are spring boot project and are Eureka Clients
+	- eureka:
+		client:
+			register-with-eureka: true
+			fetch-registry: true
+		service-url:
+			defaultZone: http://localhost:8761/eureka/
+		instance:
+			hostname: localhost  
+	- mark RestTemplate Bean and @LoadBalanced (it will search hostname as a micro-service name)
+	
+2: Create another spring boot application as eureka Server where all clients are registered 
+	- eureka:
+		client:
+			register-with-eureka: true
+			fetch-registry: true
+3: Create an API Gateway and also register it as a eureka Client
+	- eureka.client.register-with-eureka= true
+	- route all clients with their name and url mapping
+4: intregrate Hystrix with API Gateway (creating a fallback end points for every microservice )
+	- fallback endpoints will execute a method that will be executed when that particular microservice is down or taking too long to process that request
+5: Create a Hystrix DashBoard for monitoring all microServices 
+6: Create another Spring Boot App as Cloud-config-server
+	- there all the common properties that are used by all microServices are placed here 
+	- and all common properties are removed from the microservices application.properties file
+	- and create another bootstrap.yml file where we have to configure our cloud config server 
+	- Now every microservice before starting itself will call to cloud config server to load the properties and cache these properties in every microservice
+	
+7: Logging tracing Microservice: using sleuth and Zipkin, 
+	- Sleuth create an object called Tracer [service-name, trace-id, span-id]
+	- service-name: is the microservice name 
+	- trace-id: is generated only one throught the request and if one microservice call another microservice to do something, then trace-id will remain same in all microservices call
+	- span-id: inially it is same as trace-id, But when one Microservice call another Microservice then span-id is changed, ie. span-id is Microservice specified 
+	
+8: Zipkin is a tool to view the trace-id, span-id is a beautiful GUI manner
